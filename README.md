@@ -13,42 +13,43 @@ Projeto ERP web modular, escalável e offline-first para a Fazenda Escola Flor d
 - **RBAC** por perfil e permissões por módulo
 - **Módulos plugáveis**: catálogo de módulos habilitáveis
 
+## Refatoração corporativa — Cadastros Mestres
+
+O módulo foi refatorado para padrão ERP escalável com navegação por entidade:
+
+- `/cadastros/safras`
+- `/cadastros/talhoes`
+- `/cadastros/lotes`
+
+### Componentes genéricos implementados
+
+- `EntityPageLayout` (header + action bar + conteúdo)
+- `EntityTable` (paginação, ordenação, colunas padrão de auditoria)
+- `EntityModalForm` (create/edit dinâmico por schema)
+- `ConfirmDialog` (exclusão)
+
+### Capacidades funcionais
+
+- Busca por entidade
+- Paginação server-side
+- Ordenação por coluna
+- Loading (skeleton), Empty state e Error state com retry
+- Modal com foco inicial, fechamento por ESC/clique fora e bloqueio de scroll
+- RBAC por entidade (view/create/edit/delete)
+
 ## Cobertura de requisitos do MVP
 
-### Implementado
-
-1. **Cadastros Mestres funcional (v1)**
-   - CRUD de Safras, Talhões e Lotes com persistência backend
-   - Auditoria de create/update/delete
+1. **Cadastros Mestres funcional (v2)**
+   - API REST paginada por entidade
+   - CRUD via modal e tabela genérica
+   - Auditoria com `updatedAt` e `updatedBy`
 2. **Produção Agrícola** (estrutura de navegação)
 3. **Pecuária & Bem-Estar Animal** (estrutura de navegação)
 4. **Almoxarifado & Estoques** (estrutura de navegação)
 5. **Timesheets** (estrutura de navegação)
 6. **Motor ABC funcional**
-   - Recursos -> Atividades -> Objetos de custo
-   - Cálculo por período
-7. **Offline-first**
-   - PWA instalável
-   - Service Worker com cache/fallback
-   - CRUD local IndexedDB
-   - Fila de sync + envio para API
-8. **Sincronização e conflitos**
-   - Push bidirecional (MVP)
-   - Detecção de conflito por versão
-   - Registro em log de auditoria
-9. **Relatórios essenciais**
-   - Dashboard executivo inicial
-   - Relatório de alocação ABC no frontend
-10. **Documentação in-app**
-    - Página `Documentação do Sistema`
-
-### Arquitetura preparada (backlog)
-
-- Integrações contábeis e financeiras avançadas
-- MFA e criptografia em repouso ponta a ponta
-- Relatórios PDF/Excel offline completos
-- Workflow de resolução manual campo-a-campo completo na UI
-- Persistência relacional PostgreSQL (produção)
+7. **Offline-first** com IndexedDB + Sync MVP
+8. **Documentação in-app**
 
 ## Como executar
 
@@ -58,29 +59,36 @@ npm run dev:backend
 npm run dev:frontend
 ```
 
-> O frontend usa proxy local `/api -> http://localhost:4000` no Vite. Em Codespaces, se preferir, use `VITE_API_URL` para apontar para a URL pública da porta 4000.
-
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:4000`
 
 ## Endpoints principais
 
-- `GET /api/bootstrap` → tenant, usuários, módulos e RBAC
-- `GET /api/cadastros/overview` → visão consolidada de Safras/Talhões/Lotes
-- `POST /api/cadastros/safras` | `PUT /api/cadastros/safras/:id` | `DELETE /api/cadastros/safras/:id`
-- `POST /api/cadastros/talhoes` | `PUT /api/cadastros/talhoes/:id` | `DELETE /api/cadastros/talhoes/:id`
-- `POST /api/cadastros/lotes` | `PUT /api/cadastros/lotes/:id` | `DELETE /api/cadastros/lotes/:id`
-- `GET /api/abc/:period` → cálculo ABC por período
-- `POST /api/sync/push` → push da fila offline
-- `GET /api/sync/queue` → fila de sincronização (servidor)
-- `GET /api/audit` → auditoria de eventos
+### Cadastros Mestres (REST + paginação)
 
-## Entidades base contempladas
+- `GET /api/cadastros/safras?page=1&pageSize=10&sortField=name&sortDirection=asc&q=verao`
+- `GET /api/cadastros/safras/:id`
+- `POST /api/cadastros/safras`
+- `PUT /api/cadastros/safras/:id`
+- `DELETE /api/cadastros/safras/:id`
 
-- Tenants/unidades
-- Usuários/papéis/permissões
-- Safras, talhões e lotes
-- Recursos/naturezas de custo
-- Atividades ABC e objetos de custo
-- Apontamentos e fila de sync
-- Auditoria e logs
+- `GET /api/cadastros/talhoes?page=1&pageSize=10&sortField=code&sortDirection=asc&q=T-01`
+- `GET /api/cadastros/talhoes/:id`
+- `POST /api/cadastros/talhoes`
+- `PUT /api/cadastros/talhoes/:id`
+- `DELETE /api/cadastros/talhoes/:id`
+
+- `GET /api/cadastros/lotes?page=1&pageSize=10&sortField=code&sortDirection=asc&q=nelore`
+- `GET /api/cadastros/lotes/:id`
+- `POST /api/cadastros/lotes`
+- `PUT /api/cadastros/lotes/:id`
+- `DELETE /api/cadastros/lotes/:id`
+
+### Compatibilidade
+
+- `GET /api/cadastros/overview` (mantido para retrocompatibilidade)
+- `GET /api/bootstrap`
+- `GET /api/abc/:period`
+- `POST /api/sync/push`
+- `GET /api/sync/queue`
+- `GET /api/audit`

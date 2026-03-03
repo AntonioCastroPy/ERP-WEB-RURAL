@@ -5,7 +5,7 @@ import { ModulePage } from './pages/ModulePage';
 import { AbcPage } from './pages/AbcPage';
 import { SyncPage } from './pages/SyncPage';
 import { DocsPage } from './pages/DocsPage';
-import { CadastrosPage } from './pages/CadastrosPage';
+import { CadastrosRoutes } from './pages/cadastros/CadastrosRoutes';
 
 export function App() {
   return (
@@ -14,7 +14,7 @@ export function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/cadastros" element={<CadastrosPage />} />
+          <Route path="/cadastros/*" element={<CadastrosRoutes />} />
           <Route path="/producao" element={<ModulePage title="Produção Agrícola" bullets={[
             'Planejamento por safra',
             'Ordens de Serviço de campo',

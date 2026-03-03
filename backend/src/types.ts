@@ -73,31 +73,37 @@ export interface SyncOperation {
   createdAt: string;
 }
 
-export interface CropSeason {
+export interface BaseMasterEntity {
   id: string;
   tenantId: string;
+  version: number;
+  updatedAt: string;
+  updatedBy: string;
+}
+
+export interface CropSeason extends BaseMasterEntity {
   name: string;
   year: number;
   status: 'planejada' | 'ativa' | 'encerrada';
-  version: number;
 }
 
-export interface FieldPlot {
-  id: string;
-  tenantId: string;
+export interface FieldPlot extends BaseMasterEntity {
   code: string;
   areaHectares: number;
   soilType: string;
   currentSeasonId: string;
-  version: number;
 }
 
-export interface HerdLot {
-  id: string;
-  tenantId: string;
+export interface HerdLot extends BaseMasterEntity {
   code: string;
   species: string;
   breed: string;
   headCount: number;
-  version: number;
+}
+
+export interface PaginatedResult<T> {
+  data: T[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
 }
