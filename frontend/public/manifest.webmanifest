@@ -1,0 +1,10 @@
+{
+  "name": "ERP Rural ABC",
+  "short_name": "ERP Rural",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f2f3d",
+  "theme_color": "#0f2f3d",
+  "lang": "pt-BR",
+  "icons": []
+}
