@@ -5,6 +5,7 @@ import { ModulePage } from './pages/ModulePage';
 import { AbcPage } from './pages/AbcPage';
 import { SyncPage } from './pages/SyncPage';
 import { DocsPage } from './pages/DocsPage';
+import { CadastrosPage } from './pages/CadastrosPage';
 
 export function App() {
   return (
@@ -13,12 +14,7 @@ export function App() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/cadastros" element={<ModulePage title="Cadastros Mestres" bullets={[
-            'Unidades/Fazendas/Talhões/Áreas',
-            'Culturas/Safras/Sistemas de Plantio',
-            'Rebanhos/Lotes/Animais',
-            'Centros de Custo, Projetos e Convênios'
-          ]} />} />
+          <Route path="/cadastros" element={<CadastrosPage />} />
           <Route path="/producao" element={<ModulePage title="Produção Agrícola" bullets={[
             'Planejamento por safra',
             'Ordens de Serviço de campo',

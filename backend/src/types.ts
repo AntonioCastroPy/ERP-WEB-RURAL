@@ -72,3 +72,32 @@ export interface SyncOperation {
   conflict?: Record<string, { client: unknown; server: unknown }>;
   createdAt: string;
 }
+
+export interface CropSeason {
+  id: string;
+  tenantId: string;
+  name: string;
+  year: number;
+  status: 'planejada' | 'ativa' | 'encerrada';
+  version: number;
+}
+
+export interface FieldPlot {
+  id: string;
+  tenantId: string;
+  code: string;
+  areaHectares: number;
+  soilType: string;
+  currentSeasonId: string;
+  version: number;
+}
+
+export interface HerdLot {
+  id: string;
+  tenantId: string;
+  code: string;
+  species: string;
+  breed: string;
+  headCount: number;
+  version: number;
+}
